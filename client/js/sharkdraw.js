@@ -5,9 +5,9 @@ function sd(el, mode) {
 	this.setSize(512, 512)
 
 	// event callbacks
-	this.canvas.onmousemove = this.stroke.bind(this)
-	this.canvas.onmousedown = this.start.bind(this)
-	this.canvas.onmouseup = this.stop.bind(this)
+	this.canvas.addEventListener("mousedown", this.start.bind(this))
+	document.body.addEventListener("mousemove", this.draw.bind(this))
+	document.body.addEventListener("mouseup", this.stop.bind(this))
 
 	this.previous = { x: 0, y: 0 }
 }
@@ -16,20 +16,20 @@ sd.prototype.start = function(e) {
 	this.previous.x = e.pageX
 	this.previous.y = e.pageY
 	this.painting = true
-	this.stroke(e)
+	this.draw(e)
 }
 
 sd.prototype.stop = function(e) {
 	this.painting = false
 }
 
-sd.prototype.stroke = function(e) {
+sd.prototype.draw = function(e) {
 	if (!this.painting)
 		return
 
 	var c = this.ctx
 
-	c.lineWidth = 15;
+	c.lineWidth = 10;
 	c.lineCap = "round";
 
 	c.beginPath();
