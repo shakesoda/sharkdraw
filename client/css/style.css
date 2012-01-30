@@ -1,3 +1,14 @@
 body {
 	background: #555;
 }
+
+#container {
+	width: 854px;
+	margin: 20px auto;
+}
+
+#sd_canvas {
+	border-radius: 3px;
+	box-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
+}
+
