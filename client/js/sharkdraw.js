@@ -10,13 +10,11 @@ function sd(el, mode) {
 	this.canvas.onmouseup = this.stop.bind(this)
 
 	this.previous = { x: 0, y: 0 }
-	this.firstUpdate = true
 }
 
 sd.prototype.start = function(e) {
 	this.previous.x = e.pageX
 	this.previous.y = e.pageY
-	this.firstUpdate = false
 	this.painting = true
 	this.stroke(e)
 }
@@ -30,27 +28,23 @@ sd.prototype.stroke = function(e) {
 		return
 
 	var c = this.ctx
+
 	c.lineWidth = 15;
 	c.lineCap = "round";
+
 	c.beginPath();
-
-	// prevent line from 0,0 on first update
-	if (!this.firstUpdate)
-		c.moveTo(this.previous.x, this.previous.y);
-	else {
-		c.moveTo(e.pageX+1, e.pageY+1)
-		this.firstUpdate = false
-	}
-
+	c.moveTo(this.previous.x, this.previous.y);
 	c.lineTo(e.pageX,e.pageY);
+	c.stroke();
+
 	this.previous.x = e.pageX
 	this.previous.y = e.pageY
-	c.stroke();
 }
 
 sd.prototype.clear = function() {
 	var c = this.ctx
 	var color = c.fillStyle
+
 	c.fillStyle = "#fff"
 	c.fillRect(0, 0, this.options.width, this.options.height)
 	c.fillStyle = color
