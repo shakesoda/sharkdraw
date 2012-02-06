@@ -128,7 +128,7 @@ sharkdraw.prototype = {
 
 $(function() {
 	function hook(obj) {
-		var width = $("#container").innerWidth() - $("#sidebar").outerWidth(true) - 15
+		var width = $("#container").innerWidth() - $("#sidebar").outerWidth(true) - 5
 		var height = Math.max($(window).innerHeight() - 75, $("#sidebar").outerHeight(true))
 		obj.setSize(width, height)
 	}
