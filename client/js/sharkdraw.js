@@ -119,11 +119,8 @@ sharkdraw.prototype = {
 
 $(function() {
 	function hook(obj) {
-		var width = $("#container").innerWidth() - $("#sidebar").outerWidth() - 15
-		var height = Math.max(
-			$(window).innerHeight() - 75,
-			$("#container").innerHeight()
-		)
+		var width = $("#container").innerWidth() - $("#sidebar").outerWidth(true) - 15
+		var height = Math.max($(window).innerHeight() - 75, $("#sidebar").outerHeight(true))
 		obj.setSize(width, height)
 	}
 	var canvas = new sharkdraw("sd_canvas", hook)
