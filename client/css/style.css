@@ -1,14 +1,54 @@
-body {
+html, body {
 	background: #555;
+	font-family: "Liberation Sans", sans-serif;
 }
 
 #container {
-	width: 854px;
-	margin: 20px auto;
-}
-
-#sd_canvas {
+	width: 90%;
+	margin: 10px auto;
+	padding: 5px;
+	background: white;
+	background-image: -moz-linear-gradient(#fff, #eee 50px);
+	background-image: -webkit-linear-gradient(#fff, #eee 50px);
 	border-radius: 3px;
 	box-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
 }
 
+#sd_canvas {
+	border-radius: 3px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+	vertical-align: top;
+}
+
+form {
+	display: block;
+}
+
+label {
+	display: block;
+}
+
+label span {
+	display: inline-block;
+	width: 150px;
+}
+
+fieldset {
+	padding: 10px;
+	padding-bottom: 0;
+}
+
+fieldset:last-child {
+	padding-bottom: 10px;
+}
+
+#sidebar {
+	display: inline-block;
+	width: 235px;
+	vertical-align: top;
+}
+
+span input {
+	display: inline-block;
+	position: relative;
+}
