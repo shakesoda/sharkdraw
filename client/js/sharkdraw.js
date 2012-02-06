@@ -8,6 +8,7 @@ sharkdraw.prototype = {
 	points: null,
 	bounds: null,
 	lastwidth: 0,
+	brushSize: 1,
 	updateRects: function() {
 		this.position = this.canvas.getBoundingClientRect()
 	},
@@ -62,6 +63,12 @@ sharkdraw.prototype = {
 		var c = this.ctx
 		c.putImageData(this.imageData, 0, 0)
 	},
+	update: function() {
+		var parent = this
+		$("#hooks input").each(function(){
+			parent[this.name] = this.value
+		})
+	},
 	start: function(e) {
 		var position = new vec(
 			e.pageX - this.position.left,
@@ -83,6 +90,8 @@ sharkdraw.prototype = {
 		this.save()
 
 		this.painting = true
+
+		this.update()
 		this.draw(e)
 	},
 	stop: function(e) {
@@ -105,7 +114,7 @@ sharkdraw.prototype = {
 
 		var c = this.ctx
 
-		c.lineWidth = 5;
+		c.lineWidth = this.brushSize;
 		c.lineCap = "round";
 
 		c.beginPath();
@@ -124,4 +133,32 @@ $(function() {
 		obj.setSize(width, height)
 	}
 	var canvas = new sharkdraw("sd_canvas", hook)
+
+	// brush size controls
+	$(document).keypress(function(e){
+		var limit = 128
+		var key = String.fromCharCode(e.which)
+		
+		// get value from element so manually entered sizes are respected
+		var el = $("#hooks input[name='brushSize']")
+		canvas.brushSize = el.val()
+
+		switch (key) {
+			case '[':
+				canvas.brushSize--
+				break;
+			case ']':
+				canvas.brushSize++
+				break;
+			default: break;
+		}
+
+		if (canvas.brushSize > limit)
+			canvas.brushSize = limit
+
+		if (key == '[' || key == ']') {
+			e.preventDefault();
+			$("#hooks input[name='brushSize']").val(canvas.brushSize)
+		}
+	})
 })
