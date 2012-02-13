@@ -1,73 +1,121 @@
+function sd_controller(canvas) {
+	this.init(canvas)
+}
+
+		// $.gritter.add({
+			// title: "Nope",
+			// text: "sss"
+		// })
+
+
+sd_controller.prototype = {
+	brushSize: 5,
+	init: function(canvas) {
+		this.parent = canvas
+		this.build()
+	},
+	build: function() {
+		var sd = $(this.parent.element)
+
+		// controller
+		var controls = document.createElement("div")
+		controls.id = "sd_controller"
+
+		var elements = [
+			{ name: "sd_hooks", type: "form" }
+		]
+		
+		for (i in elements) {
+			var el = document.createElement(elements[i].type)
+			el.id = elements[i].name
+			controls.appendChild(el)
+		}
+
+		sd.append(controls)
+		
+		var toggle = document.createElement("div")
+		toggle.id = "sd_toggle"
+		toggle.innerHTML = "<span class='options'>Options</span>"
+		sd.append(toggle)
+
+		
+
+		var height = $("#sd_controller").innerHeight();
+
+		$("#sd_controller").toggle()
+		$("#sd_toggle").state = true
+		$("#sd_toggle").click(function(){
+			var state = '-='
+			this.state = !this.state
+			if (this.state)
+				state = '+='
+			$("#sd_controller").stop().slideToggle('fast');
+			$("#sd_toggle").stop().animate({
+				top: state+height+'px',
+			}, 'fast')
+		})
+	}
+}
+
 function sharkdraw(el, hookfn) {
 	this.init(el, hookfn)
 }
 
 sharkdraw.prototype = {
-	previous: null,
-	options: null,
-	points: null,
-	bounds: null,
-	lastwidth: 0,
-	brushSize: 1,
 	updateRects: function() {
 		this.position = this.canvas.getBoundingClientRect()
 	},
 	clear: function() {
-		var c = this.ctx
-		var color = c.fillStyle
-
-		c.fillStyle = "#fff"
-		c.fillRect(0, 0, this.options.width, this.options.height)
-		c.fillStyle = color
+		this.ctx.clearRect(0, 0, this.options.width, this.options.height)
 	},
 	setSize: function(x, y) {
 		this.options.width = x
 		this.options.height = y
 
+		this.save()
 		this.canvas.setAttribute("width", x)
 		this.canvas.setAttribute("height", y)
-		
-		this.clear()
+		this.finish()
+
 		this.updateRects()
 	},
+	build: function() {
+		var sd = this.element
+		this.canvas = document.createElement("canvas")
+		this.canvas.id = "sd_canvas"
+		sd.append(this.canvas)
+		
+		this.ctx = this.canvas.getContext("2d")
+		this.controller = new sd_controller(this)
+	},
 	init: function(el, hookfn) {
+		this.element = $(el)
+		this.build()
+
+		// default settings
 		this.options = {}
 		this.bounds = { min: null, max: null }
-		this.canvas = document.getElementById(el);
-		this.ctx = this.canvas.getContext("2d")
 		this.points = []
 		this.resizeHook = hookfn
-
 		this.resizeHook(this)
 
 		// event callbacks
 		this.canvas.addEventListener("mousedown", this.start.bind(this))
 		document.body.addEventListener("mousemove", this.draw.bind(this))
 		document.body.addEventListener("mouseup", this.stop.bind(this))
+		window.addEventListener("resize", hookfn.bind(this))
 
-		var dummy = this
-
-		// need to recalculate bounds when window size changes
-		window.addEventListener("resize", function(){
-			hookfn(dummy)
-		})
+		this.clear()
 	},
 	save: function() {
 		var c = this.ctx
 
-		// TODO: partial updates?
-		this.imageData = c.getImageData(0, 0,
-			this.options.width, this.options.height)
+		this.imageData = c.getImageData(0, 0, this.options.width,
+			this.options.height)
 	},
 	finish: function() {
 		var c = this.ctx
 		c.putImageData(this.imageData, 0, 0)
-	},
-	update: function() {
-		var parent = this
-		$("#hooks input").each(function(){
-			parent[this.name] = this.value
-		})
 	},
 	start: function(e) {
 		var position = new vec(
@@ -87,15 +135,14 @@ sharkdraw.prototype = {
 		this.points.push(position)
 
 		// save canvas state so the last stroke can be redrawn
-		this.save()
+		//this.save()
 
 		this.painting = true
 
-		this.update()
 		this.draw(e)
 	},
 	stop: function(e) {
-//		this.finish()
+		this.save()
 		this.painting = false
 	},
 	draw: function(e) {
@@ -114,8 +161,8 @@ sharkdraw.prototype = {
 
 		var c = this.ctx
 
-		c.lineWidth = this.brushSize;
-		c.lineCap = "round";
+		c.lineWidth = this.controller.brushSize
+		c.lineCap = "round"
 
 		c.beginPath();
 		c.moveTo(last.x, last.y)
@@ -127,38 +174,10 @@ sharkdraw.prototype = {
 }
 
 $(function() {
-	function hook(obj) {
-		var width = $("#container").innerWidth() - $("#sidebar").outerWidth(true) - 5
-		var height = Math.max($(window).innerHeight() - 75, $("#sidebar").outerHeight(true))
-		obj.setSize(width, height)
-	}
-	var canvas = new sharkdraw("sd_canvas", hook)
-
-	// brush size controls
-	$(document).keypress(function(e){
-		var limit = 128
-		var key = String.fromCharCode(e.which)
-		
-		// get value from element so manually entered sizes are respected
-		var el = $("#hooks input[name='brushSize']")
-		canvas.brushSize = el.val()
-
-		switch (key) {
-			case '[':
-				canvas.brushSize--
-				break;
-			case ']':
-				canvas.brushSize++
-				break;
-			default: break;
-		}
-
-		if (canvas.brushSize > limit)
-			canvas.brushSize = limit
-
-		if (key == '[' || key == ']') {
-			e.preventDefault();
-			$("#hooks input[name='brushSize']").val(canvas.brushSize)
-		}
+	// Add canvas and controller to the DOM
+	new sharkdraw("#sharkdraw", function resize_hook() {
+		var width = $("#container").innerWidth()
+		var height = $("#container").innerHeight()
+		this.setSize(width, height)
 	})
 })

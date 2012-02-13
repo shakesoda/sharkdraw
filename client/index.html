@@ -3,55 +3,21 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Sharkdraw v0.0.1</title>
-	
+
 	<link rel="stylesheet" href="css/reset.css" />
 	<link rel="stylesheet" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/jquery.gritter.css" />
 	<link rel="stylesheet" href="css/style.css" />
-	
+
 	<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="js/jquery.gritter.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/utilities.js"></script>
 	<script type="text/javascript" src="js/sharkdraw.js"></script>
 </head>
 <body>
 	<div id="container">
-		<form id="sidebar" action="#" method="post">
-			<fieldset id="hooks">
-				<label for="brushSize">
-					<span>Brush Size</span>
-					<input type="number" name="brushSize" value="5" />
-				</label>
-				<!--
-				<label for="speedScale">
-					<span><input type="checkbox" name="speedScale[toggle]" /> Brush Scaling</span>
-					<input type="text" name="speedScale[min]" placeholder="Min" />
-					<input type="text" name="speedScale[max]" placeholder="Max" />
-					<select name="speedScale[type]">
-						<option value="speed">Speed</option>
-						<option value="pressure">Pressure</option>
-					</select>
-				</label>
-				<label for="smoothing">
-					<span><input type="checkbox" name="smoothing[toggle]" /> Smoothing</span>
-					<input type="text" name="smoothing[factor]" value="5"/>
-					<select name="smoothing[method]">
-						<option value="linear">Linear</option>
-						<option value="spline">Spline</option>
-						<option value="bezier">Bezier</option>
-						<option value="catmull">Catmull-Rom</option>
-					</select>
-				</label>-->
-			</fieldset>
-			<!--
-			<fieldset>
-				<input type="submit" value="Undo" />
-				<input type="submit" value="Redo" />
-				<input type="text" name="undo-stack-size" size="10" placeholder="Undo levels" />
-				<input type="submit" value="Recalculate Last Stroke" />
-			</fieldset>
-			-->
-		</form>
-		<canvas id="sd_canvas">Upgrade your browser!</canvas>
+		<div id="sharkdraw"></div>
 	</div>
 </body>
 </html>

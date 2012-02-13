@@ -1,51 +1,40 @@
 html, body {
 	background: #555;
 	font-family: "Liberation Sans", sans-serif;
+	height: 100%;
+	width: 100%;
+	position: fixed;
 }
 
-#container {
-	width: 90%;
-	margin: 10px auto;
-	background: white;
-	background-image: -moz-linear-gradient(#fff, #eee 50px);
-	background-image: -webkit-linear-gradient(#fff, #eee 50px);
-	border-radius: 3px;
-	box-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
-}
-
+.gritter-item { font-family: "Liberation Sans", sans-serif; }
+#container { height: 100%; }
 #sd_canvas {
-	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;
-	box-shadow: -1px 0 0px rgba(0, 0, 0, 0.25);
-	vertical-align: top;
+	background: white;
+	cursor: crosshair;
 }
 
-label {
-	display: block;
-	font-size: 90%;
+#sd_controller {
+	position: absolute;
+	top: 0;
+	background-image: -moz-linear-gradient(#fafafa, #f5f5f5, #eee);
+	border-bottom: 2px solid white;
+	box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+	height: 50px;
+	width: 100%;
 }
 
-label span {
-	display: inline-block;
-}
-
-fieldset {
-	padding: 6px;
-	padding-bottom: 0;
-}
-
-fieldset:last-child {
-	padding-bottom: 10px;
-}
-
-#sidebar {
-	display: inline-block;
-	width: 235px;
-	padding-left: 5px;
-	vertical-align: top;
-}
-
-span input {
-	display: inline-block;
-	position: relative;
+#sd_toggle {
+	top: 0;
+	cursor: pointer;
+	background-image: -moz-linear-gradient(#eee, #ddd);
+	padding: 5px;
+	border: 2px solid white;
+	border-top: none;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+	color: #444;
+	text-shadow: 0 -1px 0 rgba(255, 255, 255, 1);
+	position: absolute;
+	left: 10px;
 }
