@@ -7,7 +7,7 @@ html, body {
 }
 
 .gritter-item { font-family: "Liberation Sans", sans-serif; }
-#container { height: 100%; }
+
 #sd_canvas {
 	background: white;
 	cursor: crosshair;
