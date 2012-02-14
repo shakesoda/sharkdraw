@@ -170,6 +170,8 @@ sharkdraw.prototype = {
 		this.painting = false
 	},
 	draw: function(e) {
+		e.preventDefault()
+
 		if (!this.painting)
 			return
 
