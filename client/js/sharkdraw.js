@@ -2,14 +2,14 @@ function sd_controller(canvas) {
 	this.init(canvas)
 }
 
-		// $.gritter.add({
-			// title: "Nope",
-			// text: "sss"
-		// })
-
+$.extend($.gritter.options, { 
+	position: 'top-right',
+	fade_in_speed: 'fast',
+	fade_out_speed: 'medium',
+	time: 2000,
+});
 
 sd_controller.prototype = {
-	brushSize: 5,
 	init: function(canvas) {
 		this.parent = canvas
 		this.build()
@@ -21,16 +21,33 @@ sd_controller.prototype = {
 		var controls = document.createElement("div")
 		controls.id = "sd_controller"
 
+		// form
+		var form = document.createElement("form")
+		form.id = "sd_hooks"
+
 		var elements = [
-			{ name: "sd_hooks", type: "form" }
+			{ name: "clear", type: "button", label: "Clear", callback: 'clear', message: "Canvas Cleared." },
+			{ name: "bigger", type: "button", label: "+", callback: 'bigger', message: "" },
+			{ name: "smaller", type: "button", label: "-", callback: 'smaller', message: "" }
 		]
 		
 		for (i in elements) {
-			var el = document.createElement(elements[i].type)
-			el.id = elements[i].name
-			controls.appendChild(el)
+			var el = document.createElement('input')
+			el.name = elements[i].name
+			el.type = elements[i].type
+			el.value = elements[i].label
+			el.xCallback = elements[i].callback
+			el.xMessage = elements[i].message
+
+			var that = this
+			el.onclick = function(){
+				that.parent[this.xCallback]()
+				$.gritter.add({ title: "Information", text: this.xMessage })
+			}
+			form.appendChild(el)
 		}
 
+		controls.appendChild(form)
 		sd.append(controls)
 		
 		var toggle = document.createElement("div")
@@ -38,11 +55,9 @@ sd_controller.prototype = {
 		toggle.innerHTML = "<span class='options'>Options</span>"
 		sd.append(toggle)
 
-		
-
 		var height = $("#sd_controller").innerHeight();
+		$("#sd_controller").toggle(false)
 
-		$("#sd_controller").toggle()
 		$("#sd_toggle").state = true
 		$("#sd_toggle").click(function(){
 			var state = '-='
@@ -62,6 +77,7 @@ function sharkdraw(el, hookfn) {
 }
 
 sharkdraw.prototype = {
+	brushSize: 1,
 	updateRects: function() {
 		this.position = this.canvas.getBoundingClientRect()
 	},
@@ -78,6 +94,14 @@ sharkdraw.prototype = {
 		this.finish()
 
 		this.updateRects()
+	},
+	bigger: function(){
+		this.brushSize++
+		console.log(this.brushSize)
+	},
+	smaller: function(){
+		this.brushSize--
+		console.log(this.brushSize)
 	},
 	build: function() {
 		var sd = this.element
@@ -161,7 +185,7 @@ sharkdraw.prototype = {
 
 		var c = this.ctx
 
-		c.lineWidth = this.controller.brushSize
+		c.lineWidth = this.brushSize
 		c.lineCap = "round"
 
 		c.beginPath();
